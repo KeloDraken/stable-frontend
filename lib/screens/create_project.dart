@@ -2,11 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
-class CreateProject extends StatelessWidget {
-  CreateProject({super.key, required this.title});
+class CreateProject extends StatefulWidget {
+  const CreateProject({super.key, required this.title});
 
-  String title;
+  final String title;
 
+  @override
+  State<CreateProject> createState() => _CreateProject();
+}
+
+class _CreateProject extends State<CreateProject> {
   dynamic _getProjectDirectory() async {
     String? projectDirectory = await FilePicker.platform.getDirectoryPath();
 
@@ -29,7 +34,7 @@ class CreateProject extends StatelessWidget {
           ),
         ),
         Text(
-          title,
+          widget.title,
           style: const TextStyle(
             fontSize: 38,
             fontWeight: FontWeight.w600,
