@@ -13,7 +13,7 @@ void main() async {
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.normal,
+    titleBarStyle: TitleBarStyle.hidden,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sága',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "RobotoRegular"),
-      home: CreateProject(
+      home: const CreateProject(
         title: 'Sága',
       ),
     );

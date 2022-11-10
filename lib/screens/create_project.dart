@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:gorom/components/title_bar.dart';
+import 'package:window_manager/window_manager.dart';
 
 class CreateProject extends StatefulWidget {
   const CreateProject({super.key, required this.title});
@@ -11,7 +13,7 @@ class CreateProject extends StatefulWidget {
   State<CreateProject> createState() => _CreateProject();
 }
 
-class _CreateProject extends State<CreateProject> {
+class _CreateProject extends State<CreateProject> with WindowListener {
   dynamic _getProjectDirectory() async {
     String? projectDirectory = await FilePicker.platform.getDirectoryPath();
 
@@ -53,6 +55,7 @@ class _CreateProject extends State<CreateProject> {
         child: Center(
           child: Column(
             children: <Widget>[
+              const TitleBar(),
               _renderLogo(),
               ElevatedButton(
                 onPressed: () {
