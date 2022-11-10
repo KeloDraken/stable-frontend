@@ -1,6 +1,6 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:gorom/components/title_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -24,37 +24,13 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     return projectDirectory;
   }
 
-  Widget _renderLogo() {
-    return Row(
-      children: <Widget>[
-        const Text(
-          "kelodraken",
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Lobster",
-          ),
-        ),
-        Text(
-          widget.title,
-          style: const TextStyle(
-            fontSize: 38,
-            fontWeight: FontWeight.w600,
-            fontFamily: "RobotoThin",
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           children: <Widget>[
-            const TitleBar(),
-            _renderLogo(),
+            TitleBar(title: widget.title),
             ElevatedButton(
               onPressed: () {
                 _getProjectDirectory();
