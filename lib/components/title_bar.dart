@@ -134,8 +134,8 @@ class TitleBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-           Container(
-             margin: const EdgeInsets.symmetric(horizontal: 4),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             child: _renderLogo(),
           ),
           _renderButtons(),
