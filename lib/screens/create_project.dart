@@ -50,21 +50,18 @@ class _CreateProject extends State<CreateProject> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              const TitleBar(),
-              _renderLogo(),
-              ElevatedButton(
-                onPressed: () {
-                  _getProjectDirectory();
-                },
-                child: const Text("Open project"),
-              )
-            ],
-          ),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            const TitleBar(),
+            _renderLogo(),
+            ElevatedButton(
+              onPressed: () {
+                _getProjectDirectory();
+              },
+              child: const Text("Open project"),
+            )
+          ],
         ),
       ),
     );
