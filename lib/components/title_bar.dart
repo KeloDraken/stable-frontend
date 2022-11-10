@@ -10,31 +10,15 @@ class TitleBar extends StatelessWidget {
     await windowManager.minimize();
   }
 
-  void _handleMaximise() async {
-    await windowManager.maximize();
-  }
-
-  void _handleUnmaximise() async {
-    await windowManager.unmaximize();
-  }
-
   void _handleClose() async {
     await windowManager.close();
-  }
-
-  void _windowSize() async {
-    if (await windowManager.isMaximized()) {
-      _handleUnmaximise();
-    } else {
-      _handleMaximise();
-    }
   }
 
   Widget _renderLogo() {
     return Row(
       children: <Widget>[
         const SizedBox(
-          width: 6,
+          width: 10,
         ),
         const Text(
           "kelodraken",
@@ -52,7 +36,7 @@ class TitleBar extends StatelessWidget {
           title,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: FontWeight.w600,
             fontFamily: "RobotoThin",
           ),
@@ -88,21 +72,6 @@ class TitleBar extends StatelessWidget {
           ),
           child: const Icon(
             Icons.minimize_outlined,
-            size: 17,
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () => _windowSize(),
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            foregroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all(
-              const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            ),
-          ),
-          child: const Icon(
-            Icons.maximize_outlined,
             size: 17,
           ),
         ),

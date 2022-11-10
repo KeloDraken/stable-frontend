@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gorom/screens/create_project.dart';
+import 'package:gorom/screens/open_project.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -18,6 +18,7 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.setMovable(false);
+    await windowManager.setMaximizable(false);
     await windowManager.focus();
   });
 
