@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:git/git.dart';
+import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:gorom/components/title_bar.dart';
 import 'package:window_manager/window_manager.dart';
@@ -14,14 +15,43 @@ class CreateProject extends StatefulWidget {
 }
 
 class _CreateProject extends State<CreateProject> with WindowListener {
-  dynamic _getProjectDirectory() async {
+  String _projectDirectory = "";
+
+  Future<void> _initNewRepo() async {
+    String projectDirectory = p.canonicalize(_projectDirectory);
+
+    if (await GitDir.isGitDir(projectDirectory)) {
+      print("A Saga exists in this directory");
+      return;
+    }
+
+    await GitDir.init(
+      projectDirectory,
+      allowContent: true,
+      initialBranch: "master",
+    );
+
+     await runGit(
+      ['add', '.'],
+      processWorkingDir: _projectDirectory.toString(),
+    );
+    await runGit(
+      ['commit', '-m', 'Initial commit'],
+      processWorkingDir: _projectDirectory.toString(),
+    );
+
+    return;
+  }
+
+  Future<void> _getProjectDirectory() async {
     String? projectDirectory = await FilePicker.platform.getDirectoryPath();
 
-    if (projectDirectory == null) return null;
+    if (projectDirectory == null) return;
 
-    if (kDebugMode) print(projectDirectory);
-
-    return projectDirectory;
+    setState(() {
+      _projectDirectory = projectDirectory;
+    });
+    _initNewRepo();
   }
 
   @override
@@ -40,6 +70,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
           const SizedBox(
             height: 30,
           ),
+          Text(_projectDirectory),
           ElevatedButton(
             onPressed: () {
               _getProjectDirectory();
