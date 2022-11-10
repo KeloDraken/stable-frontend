@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:window_manager/window_manager.dart';
-
 import 'package:gorom/screens/create_project.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +9,7 @@ void main() async {
 
   WindowOptions windowOptions = const WindowOptions(
     size: Size(800, 600),
+    minimumSize: Size(800, 600),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -18,7 +18,6 @@ void main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.setMovable(false);
-    await windowManager.setResizable(false);
     await windowManager.focus();
   });
 

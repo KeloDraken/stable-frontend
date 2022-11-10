@@ -24,21 +24,61 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     return projectDirectory;
   }
 
+  List<Widget> _recentProjects() {
+    return <Widget>[
+      const ListTile(
+        leading: Icon(Icons.list),
+        trailing: Text(
+          "GFG",
+          style: TextStyle(color: Colors.green, fontSize: 15),
+        ),
+        title: Text("List item"),
+      ),
+      const ListTile(
+        leading: Icon(Icons.list),
+        trailing: Text(
+          "GFG",
+          style: TextStyle(color: Colors.green, fontSize: 15),
+        ),
+        title: Text("List item"),
+      ),
+      const ListTile(
+        leading: Icon(Icons.list),
+        trailing: Text(
+          "GFG",
+          style: TextStyle(color: Colors.green, fontSize: 15),
+        ),
+        title: Text("List item"),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            TitleBar(title: widget.title),
-            ElevatedButton(
-              onPressed: () {
-                _getProjectDirectory();
-              },
-              child: const Text("Open project"),
-            )
-          ],
-        ),
+      body: Column(
+        children: [
+          TitleBar(title: widget.title),
+          const SizedBox(
+            height: 50,
+          ),
+          const Text(
+            "Recent projects",
+            style: TextStyle(fontSize: 45),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          SizedBox(
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: _recentProjects(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
