@@ -33,6 +33,9 @@ class TitleBar extends StatelessWidget {
   Widget _renderLogo() {
     return Row(
       children: <Widget>[
+        const SizedBox(
+          width: 6,
+        ),
         const Text(
           "kelodraken",
           style: TextStyle(
@@ -54,6 +57,72 @@ class TitleBar extends StatelessWidget {
             fontFamily: "RobotoThin",
           ),
         ),
+        const SizedBox(
+          width: 2,
+        ),
+        const Text(
+          "beta",
+          style: TextStyle(
+            color: Colors.black45,
+            fontSize: 14,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderButtons() {
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            _handleMinimise();
+          },
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            foregroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all(
+              const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+          ),
+          child: const Icon(
+            Icons.minimize_outlined,
+            size: 17,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () => _windowSize(),
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            foregroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all(
+              const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+          ),
+          child: const Icon(
+            Icons.maximize_outlined,
+            size: 17,
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            _handleClose();
+          },
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            backgroundColor: MaterialStateProperty.all(Colors.red),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            shape: MaterialStateProperty.all(
+              const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+          ),
+          child: const Icon(
+            Icons.close_outlined,
+            size: 17,
+          ),
+        ),
       ],
     );
   }
@@ -66,62 +135,7 @@ class TitleBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _renderLogo(),
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  _handleMinimise();
-                },
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  foregroundColor: MaterialStateProperty.all(Colors.black),
-                  shape: MaterialStateProperty.all(
-                    const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                  ),
-                ),
-                child: const Icon(
-                  Icons.minimize_outlined,
-                  size: 18,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () => _windowSize(),
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  foregroundColor: MaterialStateProperty.all(Colors.black),
-                  shape: MaterialStateProperty.all(
-                    const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                  ),
-                ),
-                child: const Icon(
-                  Icons.maximize_outlined,
-                  size: 18,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _handleClose();
-                },
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all(
-                    const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                  ),
-                ),
-                child: const Icon(
-                  Icons.close_outlined,
-                  size: 18,
-                ),
-              ),
-            ],
-          )
+          _renderButtons(),
         ],
       ),
     );
