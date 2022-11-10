@@ -12,6 +12,7 @@ dependencies:
   window_manager: ^0.2.7
   git: ^2.2.0
   path: ^1.8.2
+  sqflite:
 
 dev_dependencies:
   flutter_test:
