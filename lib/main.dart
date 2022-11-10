@@ -17,6 +17,8 @@ void main() async {
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
+    await windowManager.setMovable(false);
+    await windowManager.setResizable(false);
     await windowManager.focus();
   });
 
@@ -30,7 +32,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sága',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "RobotoRegular"),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: "RobotoRegular",
+      ),
       home: const CreateProject(
         title: 'Sága',
       ),
