@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "gorom" "\0"
+            VALUE "FileDescription", "KeloDraken Saga" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "gorom" "\0"
+            VALUE "InternalName", "KeloDraken Saga" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "gorom.exe" "\0"
-            VALUE "ProductName", "gorom" "\0"
+            VALUE "OriginalFilename", "saga.exe" "\0"
+            VALUE "ProductName", "KeloDraken Saga" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
