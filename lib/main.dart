@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "RobotoRegular",
       ),
       home: const CreateProject(
-        title: 'Sága',
+        title: 'Saga',
       ),
     );
   }

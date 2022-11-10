@@ -24,35 +24,6 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     return projectDirectory;
   }
 
-  List<Widget> _recentProjects() {
-    return <Widget>[
-      const ListTile(
-        leading: Icon(Icons.list),
-        trailing: Text(
-          "GFG",
-          style: TextStyle(color: Colors.green, fontSize: 15),
-        ),
-        title: Text("List item"),
-      ),
-      const ListTile(
-        leading: Icon(Icons.list),
-        trailing: Text(
-          "GFG",
-          style: TextStyle(color: Colors.green, fontSize: 15),
-        ),
-        title: Text("List item"),
-      ),
-      const ListTile(
-        leading: Icon(Icons.list),
-        trailing: Text(
-          "GFG",
-          style: TextStyle(color: Colors.green, fontSize: 15),
-        ),
-        title: Text("List item"),
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,15 +40,12 @@ class _CreateProject extends State<CreateProject> with WindowListener {
           const SizedBox(
             height: 30,
           ),
-          SizedBox(
-            height: 200,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView(
-                children: _recentProjects(),
-              ),
-            ),
-          ),
+          ElevatedButton(
+            onPressed: () {
+              _getProjectDirectory();
+            },
+            child: const Text("Create a new Saga"),
+          )
         ],
       ),
     );

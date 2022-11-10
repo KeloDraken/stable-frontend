@@ -52,7 +52,7 @@ class TitleBar extends StatelessWidget {
           title,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 25,
+            fontSize: 24,
             fontWeight: FontWeight.w600,
             fontFamily: "RobotoThin",
           ),
@@ -134,7 +134,10 @@ class TitleBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          _renderLogo(),
+           Container(
+             margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: _renderLogo(),
+          ),
           _renderButtons(),
         ],
       ),
