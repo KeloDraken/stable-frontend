@@ -69,63 +69,63 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     });
   }
 
-  Widget _renderHeader() {
-    return Row(
-      children: <Widget>[
-        const Text(
-          "Working on ",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 17,
-          ),
-        ),
-        Text(
-          _projectName,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Colors.black87,
-            fontSize: 17,
-          ),
-        ),
-        const Text(
-          " with ",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 17,
-          ),
-        ),
-        Text(
-          _commits,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            color: Colors.black87,
-            fontSize: 17,
-          ),
-        ),
-        const Text(
-          "commits",
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 17,
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
           const TitleBar(),
-          SizedBox(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: _renderHeader(),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            _projectName,
+            style: const TextStyle(
+                color: Colors.black87,
+                decorationThickness: 2.3,
+                fontWeight: FontWeight.w600,
+                fontSize: 25,
+                letterSpacing: 6),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Commit history".toUpperCase(),
+            style: const TextStyle(
+              color: Colors.black54,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          DataTable(
+            columns: <DataColumn>[
+              DataColumn(
+                label: Text(
+                  _commits,
+                  style: const TextStyle(
+                      fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const DataColumn(
+                label: Text(
+                  "Commits",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+            rows: const <DataRow>[
+              DataRow(
+                cells: <DataCell>[
+                  DataCell(Text('1')),
+                  DataCell(Text('Stephen')),
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );
