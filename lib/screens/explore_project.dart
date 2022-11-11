@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gorom/components/title_bar.dart';
+import 'package:window_manager/window_manager.dart';
 
 class ExploreProjectScreen extends StatelessWidget {
   const ExploreProjectScreen({super.key});
@@ -25,7 +26,7 @@ class ExploreProject extends StatefulWidget {
   State<ExploreProject> createState() => _ExploreProject();
 }
 
-class _ExploreProject extends State<ExploreProject> {
+class _ExploreProject extends State<ExploreProject> with WindowListener {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

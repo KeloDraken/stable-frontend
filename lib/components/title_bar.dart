@@ -1,11 +1,22 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
-class TitleBar extends StatelessWidget {
+class TitleBar extends StatefulWidget {
   const TitleBar({super.key});
 
+  @override
+  State<TitleBar> createState() => _TitleBar();
+}
+
+class _TitleBar extends State<TitleBar> with WindowListener {
   void _handleMinimise() async {
     await windowManager.minimize();
+  }
+
+  void _handleHorizontalMove(Offset windowPosition) async {
+    await windowManager.setPosition(windowPosition);
   }
 
   void _handleClose() async {
@@ -101,9 +112,17 @@ class TitleBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            child: _renderLogo(),
+          GestureDetector(
+            onHorizontalDragStart: (details) async {
+              _handleHorizontalMove(await windowManager.getPosition());
+            },
+            onHorizontalDragUpdate: (details) {
+              _handleHorizontalMove(details.globalPosition);
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: _renderLogo(),
+            ),
           ),
           _renderButtons(),
         ],

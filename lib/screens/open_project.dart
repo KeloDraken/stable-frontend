@@ -4,6 +4,7 @@ import 'package:git/git.dart';
 import 'package:gorom/components/footer.dart';
 import 'package:gorom/components/title_bar.dart';
 import 'package:path/path.dart' as p;
+import 'package:window_manager/window_manager.dart';
 
 import 'explore_project.dart';
 
@@ -14,7 +15,7 @@ class CreateProject extends StatefulWidget {
   State<CreateProject> createState() => _CreateProject();
 }
 
-class _CreateProject extends State<CreateProject> {
+class _CreateProject extends State<CreateProject> with WindowListener {
   String _projectDirectory = "";
 
   void _pushExploreProject() {

@@ -17,7 +17,7 @@ void main() async {
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
-    await windowManager.setMovable(false);
+    await windowManager.setMovable(true);
     await windowManager.setMaximizable(false);
     await windowManager.setResizable(false);
     await windowManager.focus();
