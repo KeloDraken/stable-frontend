@@ -45,7 +45,7 @@ class TitleBar extends StatelessWidget {
           width: 2,
         ),
         const Text(
-          "beta",
+          "0.0.31 - alpha",
           style: TextStyle(
             color: Colors.black45,
             fontSize: 14,
