@@ -6,6 +6,8 @@ import 'package:gorom/components/title_bar.dart';
 import 'package:path/path.dart' as p;
 import 'package:window_manager/window_manager.dart';
 
+import 'explore_project.dart';
+
 class CreateProject extends StatefulWidget {
   const CreateProject({super.key, required this.title});
 
@@ -22,7 +24,12 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
     if (await GitDir.isGitDir(projectDirectory)) {
-      print("A Saga exists in this directory");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ExploreProjectScreen(),
+        ),
+      );
       return;
     }
 
