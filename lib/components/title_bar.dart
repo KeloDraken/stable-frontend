@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
 class TitleBar extends StatelessWidget {
-  const TitleBar({super.key, required this.title});
-
-  final String title;
+  const TitleBar({super.key});
 
   void _handleMinimise() async {
     await windowManager.minimize();
@@ -16,11 +14,11 @@ class TitleBar extends StatelessWidget {
 
   Widget _renderLogo() {
     return Row(
-      children: <Widget>[
-        const SizedBox(
+      children: const <Widget>[
+        SizedBox(
           width: 10,
         ),
-        const Text(
+        Text(
           "kelodraken",
           style: TextStyle(
             color: Colors.black,
@@ -29,22 +27,22 @@ class TitleBar extends StatelessWidget {
             fontFamily: "Lobster",
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: 2,
         ),
         Text(
-          title,
-          style: const TextStyle(
+          "Saga",
+          style: TextStyle(
             color: Colors.black,
             fontSize: 26,
             fontWeight: FontWeight.w600,
             fontFamily: "RobotoThin",
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: 2,
         ),
-        const Text(
+        Text(
           "0.0.31 - alpha",
           style: TextStyle(
             color: Colors.black45,

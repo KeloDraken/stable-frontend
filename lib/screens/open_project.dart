@@ -4,20 +4,17 @@ import 'package:git/git.dart';
 import 'package:gorom/components/footer.dart';
 import 'package:gorom/components/title_bar.dart';
 import 'package:path/path.dart' as p;
-import 'package:window_manager/window_manager.dart';
 
 import 'explore_project.dart';
 
 class CreateProject extends StatefulWidget {
-  const CreateProject({super.key, required this.title});
-
-  final String title;
+  const CreateProject({super.key});
 
   @override
   State<CreateProject> createState() => _CreateProject();
 }
 
-class _CreateProject extends State<CreateProject> with WindowListener {
+class _CreateProject extends State<CreateProject> {
   String _projectDirectory = "";
 
   Future<void> _initNewRepo() async {
@@ -27,7 +24,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ExploreProjectScreen(),
+          builder: (context) => const ExploreProjectScreen(),
         ),
       );
       return;
@@ -67,7 +64,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          TitleBar(title: widget.title),
+          TitleBar(),
           Expanded(
             child: Column(
               children: <Widget>[

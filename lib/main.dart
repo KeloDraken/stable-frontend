@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         fontFamily: "RobotoRegular",
       ),
-      home: const CreateProject(
-        title: 'Saga',
-      ),
+      home: const CreateProject(),
     );
   }
 }

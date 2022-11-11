@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gorom/components/title_bar.dart';
 
 class ExploreProjectScreen extends StatelessWidget {
   const ExploreProjectScreen({super.key});
@@ -27,8 +28,12 @@ class ExploreProject extends StatefulWidget {
 class _ExploreProject extends State<ExploreProject> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text("Exploring"),
+    return Scaffold(
+      body: Column(
+        children: const <Widget>[
+          TitleBar(),
+        ],
+      ),
     );
   }
 }
