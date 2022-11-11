@@ -19,6 +19,7 @@ void main() async {
     await windowManager.show();
     await windowManager.setMovable(false);
     await windowManager.setMaximizable(false);
+    await windowManager.setResizable(false);
     await windowManager.focus();
   });
 

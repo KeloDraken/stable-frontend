@@ -17,16 +17,20 @@ class CreateProject extends StatefulWidget {
 class _CreateProject extends State<CreateProject> {
   String _projectDirectory = "";
 
+  void _pushExploreProject() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ExploreProjectScreen(),
+      ),
+    );
+  }
+
   Future<void> _initNewRepo() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
     if (await GitDir.isGitDir(projectDirectory)) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ExploreProjectScreen(),
-        ),
-      );
+      _pushExploreProject();
       return;
     }
 
@@ -45,6 +49,7 @@ class _CreateProject extends State<CreateProject> {
       processWorkingDir: _projectDirectory.toString(),
     );
 
+    _pushExploreProject();
     return;
   }
 
@@ -64,7 +69,7 @@ class _CreateProject extends State<CreateProject> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          TitleBar(),
+          const TitleBar(),
           Expanded(
             child: Column(
               children: <Widget>[
