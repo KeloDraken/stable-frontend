@@ -18,11 +18,13 @@ class CreateProject extends StatefulWidget {
 class _CreateProject extends State<CreateProject> with WindowListener {
   String _projectDirectory = "";
 
-  void _pushExploreProject() {
+  void _pushExploreProject(String workingDirectory) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ExploreProjectScreen(),
+        builder: (context) {
+          return ExploreProjectScreen(workingDirectory: workingDirectory);
+        },
       ),
     );
   }
@@ -31,7 +33,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
     if (await GitDir.isGitDir(projectDirectory)) {
-      _pushExploreProject();
+      _pushExploreProject(p.canonicalize(_projectDirectory));
       return;
     }
 
@@ -50,7 +52,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       processWorkingDir: _projectDirectory.toString(),
     );
 
-    _pushExploreProject();
+    _pushExploreProject(p.canonicalize(_projectDirectory));
     return;
   }
 
