@@ -43,6 +43,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       initialBranch: "master",
     );
 
+    // gitDir.
     await runGit(
       ['add', '.'],
       processWorkingDir: _projectDirectory,

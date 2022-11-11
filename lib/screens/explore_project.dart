@@ -50,6 +50,10 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     _getCommitCount();
   }
 
+  String _commitsPlural() {
+    return _commits == "1" ? "Commit" : "Commits";
+  }
+
   Future<void> _getRepoName() async {
     ProcessResult pr = await runGit(['rev-parse', '--show-toplevel'],
         processWorkingDir: widget.workingDirectory);
@@ -85,7 +89,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                 decorationThickness: 2.3,
                 fontWeight: FontWeight.w600,
                 fontSize: 25,
-                letterSpacing: 6),
+                letterSpacing: 4),
           ),
           const SizedBox(
             height: 10,
@@ -110,10 +114,11 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                       fontSize: 17, fontWeight: FontWeight.w600),
                 ),
               ),
-              const DataColumn(
+              DataColumn(
                 label: Text(
-                  "Commits",
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                  _commitsPlural(),
+                  style: const TextStyle(
+                      fontSize: 17, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
