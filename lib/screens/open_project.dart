@@ -45,11 +45,11 @@ class _CreateProject extends State<CreateProject> with WindowListener {
 
     await runGit(
       ['add', '.'],
-      processWorkingDir: _projectDirectory.toString(),
+      processWorkingDir: _projectDirectory,
     );
     await runGit(
       ['commit', '-m', 'Initial commit'],
-      processWorkingDir: _projectDirectory.toString(),
+      processWorkingDir: _projectDirectory,
     );
 
     _pushExploreProject(p.canonicalize(_projectDirectory));
