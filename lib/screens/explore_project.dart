@@ -36,7 +36,8 @@ class ExploreProject extends StatefulWidget {
 class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _projectName = "";
   String _commits = "";
-  late GitDir gitDir;
+  late GitDir _gitDir;
+  late List<TreeEntry> _projectTree;
 
   @override
   void initState() {
@@ -45,7 +46,9 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   }
 
   Future<void> _getRepoInfo() async {
-    gitDir = await GitDir.fromExisting(widget.workingDirectory);
+    _gitDir = await GitDir.fromExisting(widget.workingDirectory);
+    _projectTree = await _getProjectFilesFromCommit(
+        "7b34fac3c3064c4e9dce6e7d56accefa983ac211");
     _getRepoName();
     _getCommitCount();
   }
@@ -66,11 +69,84 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   }
 
   Future<void> _getCommitCount() async {
-    int commits = await gitDir.commitCount();
+    int commits = await _gitDir.commitCount();
 
     setState(() {
       _commits = commits.toString();
     });
+  }
+
+  Future<List<TreeEntry>> _getProjectFilesFromCommit(String commitHash) async {
+    final args = ['ls-tree', '-r', commitHash];
+
+    final pr = await _gitDir.runCommand(args);
+    return TreeEntry.fromLsTreeOutput(pr.stdout as String);
+  }
+
+  List<DataCell> _renderFiles() {
+    List<DataCell> files = [];
+
+    // for (TreeEntry treeEntry in _projectTree) {
+    files.add(
+      const DataCell(
+        Text("videos"),
+      ),
+    );
+    files.add(
+      const DataCell(
+        Text("Initial commit"),
+      ),
+    );
+    // }
+
+    return files;
+  }
+
+  Widget _renderTableHeader() {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: const <Widget>[
+                Text("Finished scene 33 intro edit"),
+                SizedBox(
+                  width: 7,
+                ),
+                Tooltip(
+                  message: "Copy commit hash",
+                  child: Icon(
+                    Icons.copy,
+                    size: 15,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                const Text("10 hours ago"),
+                const SizedBox(
+                  width: 7,
+                ),
+                Tooltip(
+                  message: "$_commits commits made",
+                  child: Row(
+                    children: <Widget>[
+                      const Icon(
+                        Icons.restore_page_outlined,
+                        size: 15,
+                      ),
+                      Text(_commits),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -86,7 +162,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
             _projectName,
             style: const TextStyle(
                 color: Colors.black87,
-                decorationThickness: 2.3,
+                decorationThickness: 1.1,
                 fontWeight: FontWeight.w600,
                 fontSize: 25,
                 letterSpacing: 4),
@@ -94,42 +170,27 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           const SizedBox(
             height: 10,
           ),
-          Text(
-            "Commit history".toUpperCase(),
-            style: const TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
+          Container(
+            decoration: const BoxDecoration(
+                border: BorderDirectional(
+                  bottom: BorderSide(width: 1),
+                  top: BorderSide(width: 1),
+                  end: BorderSide(width: 1),
+                  start: BorderSide(width: 1),
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                _renderTableHeader(),
+                Text("this is  a test"),
+                Text("this is  a test"),
+                Text("this is  a test"),
+                Text("this is  a test"),
+                Text("this is  a test"),
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          DataTable(
-            columns: <DataColumn>[
-              DataColumn(
-                label: Text(
-                  _commits,
-                  style: const TextStyle(
-                      fontSize: 17, fontWeight: FontWeight.w600),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  _commitsPlural(),
-                  style: const TextStyle(
-                      fontSize: 17, fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
-            rows: const <DataRow>[
-              DataRow(
-                cells: <DataCell>[
-                  DataCell(Text('1')),
-                  DataCell(Text('Stephen')),
-                ],
-              ),
-            ],
           )
         ],
       ),

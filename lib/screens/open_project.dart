@@ -78,7 +78,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
             child: Column(
               children: <Widget>[
                 const SizedBox(
-                  height: 100,
+                  height: 78,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
