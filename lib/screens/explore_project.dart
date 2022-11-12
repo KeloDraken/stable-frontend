@@ -198,28 +198,31 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           Container(
             decoration: const BoxDecoration(
                 border: BorderDirectional(
-                  bottom: BorderSide(width: 1),
-                  top: BorderSide(width: 1),
-                  end: BorderSide(width: 1),
-                  start: BorderSide(width: 1),
+                  bottom: BorderSide(width: 2),
+                  top: BorderSide(width: 2),
+                  end: BorderSide(width: 2),
+                  start: BorderSide(width: 2),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             margin: const EdgeInsets.all(10),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: const BoxDecoration(color: Colors.black),
-                  child: _renderTableHeader(),
-                ),
-                Text("this is  a test"),
-                Text("this is  a test"),
-                Text("this is  a test"),
-                Text("this is  a test"),
-                Text("this is  a test"),
-              ],
+            child: Material(
+              elevation: 10,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: const BoxDecoration(color: Colors.black),
+                    child: _renderTableHeader(),
+                  ),
+                  Text("this is  a test"),
+                  Text("this is  a test"),
+                  Text("this is  a test"),
+                  Text("this is  a test"),
+                  Text("this is  a test"),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
