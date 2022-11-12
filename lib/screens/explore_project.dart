@@ -37,6 +37,7 @@ class ExploreProject extends StatefulWidget {
 class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _projectName = "";
   String _commits = "";
+  String _lastCommitMessage = "";
   late GitDir _gitDir;
   late List<TreeEntry> _projectTree;
 
@@ -48,14 +49,13 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
 
   Future<void> _getRepoInfo() async {
     _gitDir = await GitDir.fromExisting(widget.workingDirectory);
-    _projectTree = await _getProjectFilesFromCommit(
-        "7b34fac3c3064c4e9dce6e7d56accefa983ac211");
+    _projectTree = await _getProjectFilesFromCommit();
     _getRepoName();
     _getCommitCount();
   }
 
   String _commitsPlural() {
-    return _commits == "1" ? "Commit" : "Commits";
+    return _commits == "1" ? "commit" : "commits";
   }
 
   Future<void> _getRepoName() async {
@@ -77,30 +77,23 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     });
   }
 
-  Future<List<TreeEntry>> _getProjectFilesFromCommit(String commitHash) async {
-    final args = ['ls-tree', '-r', commitHash];
+  Future<List<TreeEntry>> _getProjectFilesFromCommit() async {
+    ProcessResult lastCommit = await runGit(['rev-parse', 'HEAD'],
+        processWorkingDir: widget.workingDirectory);
+
+    ProcessResult lastCommitMessage = await runGit(
+        ['show', '-s', '--format=%s'],
+        processWorkingDir: widget.workingDirectory);
+
+    setState(() {
+      _lastCommitMessage = lastCommitMessage.stdout.toString();
+    });
+
+    final args = ['ls-tree', '-r', lastCommit.stdout.toString()];
 
     final pr = await _gitDir.runCommand(args);
-    return TreeEntry.fromLsTreeOutput(pr.stdout as String);
-  }
-
-  List<DataCell> _renderFiles() {
-    List<DataCell> files = [];
-
-    // for (TreeEntry treeEntry in _projectTree) {
-    files.add(
-      const DataCell(
-        Text("videos"),
-      ),
-    );
-    files.add(
-      const DataCell(
-        Text("Initial commit"),
-      ),
-    );
-    // }
-
-    return files;
+    List<TreeEntry> treeEntry = TreeEntry.fromLsTreeOutput(pr.stdout as String);
+    return treeEntry;
   }
 
   Widget _renderTableHeader() {
@@ -110,19 +103,19 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
-                  "Finished scene 33 intro edit",
-                  style: TextStyle(
+                  _lastCommitMessage,
+                  style: const TextStyle(
                       fontSize: 17,
                       fontFamily: "RobotoThin",
                       fontWeight: FontWeight.w800,
                       color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Tooltip(
+                const Tooltip(
                   message: "Copy commit hash",
                   child: Icon(
                     Icons.copy,
@@ -147,7 +140,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                   width: 15,
                 ),
                 Tooltip(
-                  message: "$_commits commits made",
+                  message: "$_commits ${_commitsPlural()} made",
                   child: Row(
                     children: <Widget>[
                       const Icon(
