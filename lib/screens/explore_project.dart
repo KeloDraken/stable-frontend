@@ -110,24 +110,40 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           children: <Widget>[
             Row(
               children: const <Widget>[
-                Text("Finished scene 33 intro edit"),
+                Text(
+                  "Finished scene 33 intro edit",
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: "RobotoThin",
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white),
+                ),
                 SizedBox(
-                  width: 7,
+                  width: 10,
                 ),
                 Tooltip(
                   message: "Copy commit hash",
                   child: Icon(
                     Icons.copy,
                     size: 15,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
             Row(
               children: <Widget>[
-                const Text("10 hours ago"),
+                const Text(
+                  "10 hours ago",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: "RobotoThin",
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
+                ),
                 const SizedBox(
-                  width: 7,
+                  width: 15,
                 ),
                 Tooltip(
                   message: "$_commits commits made",
@@ -136,8 +152,17 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                       const Icon(
                         Icons.restore_page_outlined,
                         size: 15,
+                        color: Colors.white,
                       ),
-                      Text(_commits),
+                      Text(
+                        _commits,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontFamily: "RobotoThin",
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -180,10 +205,13 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(20),
             child: Column(
               children: <Widget>[
-                _renderTableHeader(),
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: const BoxDecoration(color: Colors.black),
+                  child: _renderTableHeader(),
+                ),
                 Text("this is  a test"),
                 Text("this is  a test"),
                 Text("this is  a test"),
