@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:git/git.dart';
 import 'package:gorom/components/title_bar.dart';
+import 'package:gorom/main.dart';
 import 'package:window_manager/window_manager.dart';
 
 class ExploreProjectScreen extends StatelessWidget {
@@ -183,17 +184,35 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           const SizedBox(
             height: 30,
           ),
-          Text(
-            _projectName,
-            style: const TextStyle(
-                color: Colors.black87,
-                decorationThickness: 1.1,
-                fontWeight: FontWeight.w600,
-                fontSize: 25,
-                letterSpacing: 4),
-          ),
-          const SizedBox(
-            height: 10,
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Icon(Icons.info_outline),
+                Text(
+                  _projectName,
+                  style: const TextStyle(
+                      color: Colors.black87,
+                      decorationThickness: 1.1,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 25,
+                      letterSpacing: 4),
+                ),
+                IconButton(
+                  tooltip: "Close project",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyApp(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
           ),
           Container(
             decoration: const BoxDecoration(
