@@ -69,6 +69,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   }
 
   Future<void> _logCommits() async {
+    _commits.clear();
     Map<String, Commit> commits = await _gitDir.commits();
 
     commits.forEach(
@@ -297,6 +298,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                               Timer.periodic(const Duration(seconds: 2),
                                   (timer) {
                                 _getLastCommit();
+                                _logCommits();
                                 setState(() {
                                   _isLoading = false;
                                   Navigator.of(ctx).pop();
