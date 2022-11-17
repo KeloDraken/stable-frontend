@@ -390,10 +390,48 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                         } else {
                           return ListTile(
                             leading: Text(
-                                (((index - _commits.length - 1) * -1) - 1)
-                                    .toString()),
+                              (((index - _commits.length - 1) * -1) - 1)
+                                  .toString(),
+                            ),
                             trailing: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                String commitHash = await _gitDir.commitTree(
+                                    _commits[index].treeSha,
+                                    _commits[index].message);
+
+                                _resetToCommit(commitHash);
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text("Reset Successful"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.all(14),
+                                          child: const Text(
+                                            "Done",
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.white,
+                                              fontFamily: "RobotoThin",
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                               child: const Icon(Icons.restore),
                             ),
                             title: Text(_commits[index].message),
