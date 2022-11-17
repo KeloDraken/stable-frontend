@@ -181,7 +181,11 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                const Icon(Icons.info_outline),
+                IconButton(
+                  tooltip: "Create new restore point",
+                  onPressed: () {},
+                  icon: const Icon(Icons.save_as_outlined),
+                ),
                 Text(
                   _projectName,
                   style: const TextStyle(
