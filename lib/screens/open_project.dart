@@ -49,7 +49,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       processWorkingDir: _projectDirectory,
     );
     await runGit(
-      ['commit', '-m', 'Initial commit'],
+      ['commit', '-m', 'New Saga created'],
       processWorkingDir: _projectDirectory,
     );
 

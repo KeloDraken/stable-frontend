@@ -36,10 +36,9 @@ class ExploreProject extends StatefulWidget {
 
 class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _projectName = "";
-  String _commits = "";
   String _lastCommitMessage = "";
+  String _lastCommitHash = "";
   late GitDir _gitDir;
-  late List<TreeEntry> _projectTree;
 
   @override
   void initState() {
@@ -49,13 +48,8 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
 
   Future<void> _getRepoInfo() async {
     _gitDir = await GitDir.fromExisting(widget.workingDirectory);
-    _projectTree = await _getProjectFilesFromCommit();
     _getRepoName();
-    _getCommitCount();
-  }
-
-  String _commitsPlural() {
-    return _commits == "1" ? "commit" : "commits";
+    _getLastCommit();
   }
 
   Future<void> _getRepoName() async {
@@ -69,15 +63,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     });
   }
 
-  Future<void> _getCommitCount() async {
-    int commits = await _gitDir.commitCount();
-
-    setState(() {
-      _commits = commits.toString();
-    });
-  }
-
-  Future<List<TreeEntry>> _getProjectFilesFromCommit() async {
+  Future<void> _getLastCommit() async {
     ProcessResult lastCommit = await runGit(['rev-parse', 'HEAD'],
         processWorkingDir: widget.workingDirectory);
 
@@ -87,13 +73,13 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
 
     setState(() {
       _lastCommitMessage = lastCommitMessage.stdout.toString();
+      _lastCommitHash = lastCommit.stdout.toString();
     });
+  }
 
-    final args = ['ls-tree', '-r', lastCommit.stdout.toString()];
-
-    final pr = await _gitDir.runCommand(args);
-    List<TreeEntry> treeEntry = TreeEntry.fromLsTreeOutput(pr.stdout as String);
-    return treeEntry;
+  Future<void> _resetProjectToLastCommit() async {
+    await runGit(['reset', '--hard', _lastCommitHash],
+        processWorkingDir: widget.workingDirectory);
   }
 
   Widget _renderTableHeader() {
@@ -102,66 +88,69 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  _lastCommitMessage,
-                  style: const TextStyle(
-                      fontSize: 17,
-                      fontFamily: "RobotoThin",
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white),
+            Tooltip(
+              message: "Your last restore point",
+              child: Text(
+                _lastCommitMessage,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontFamily: "RobotoThin",
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Tooltip(
-                  message: "Copy commit hash",
-                  child: Icon(
-                    Icons.copy,
-                    size: 15,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+              ),
             ),
-            Row(
-              children: <Widget>[
-                const Text(
-                  "10 hours ago",
+            Tooltip(
+              message: "Reset project to this point",
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                ),
+                child: const Text(
+                  "Restore",
                   style: TextStyle(
                     fontSize: 17,
-                    fontFamily: "RobotoThin",
+                    fontFamily: "RobotoRegular",
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Tooltip(
-                  message: "$_commits ${_commitsPlural()} made",
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.restore_page_outlined,
-                        size: 15,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        _commits,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontFamily: "RobotoThin",
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                onPressed: () {
+                  _resetProjectToLastCommit();
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text("Reset Successful"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(14),
+                            child: const Text(
+                              "Done",
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                                fontFamily: "RobotoThin",
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ],
@@ -186,11 +175,12 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                 Text(
                   _projectName,
                   style: const TextStyle(
-                      color: Colors.black87,
-                      decorationThickness: 1.1,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 25,
-                      letterSpacing: 4),
+                    color: Colors.black87,
+                    decorationThickness: 1.1,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 25,
+                    letterSpacing: 4,
+                  ),
                 ),
                 IconButton(
                   tooltip: "Close project",
