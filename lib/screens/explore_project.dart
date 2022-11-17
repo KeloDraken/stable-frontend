@@ -71,9 +71,11 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   Future<void> _logCommits() async {
     Map<String, Commit> commits = await _gitDir.commits();
 
-    commits.forEach((key, value) {
-      _commits.add(value);
-    });
+    commits.forEach(
+      (key, value) {
+        _commits.add(value);
+      },
+    );
   }
 
   Future<void> _getLastCommit() async {
@@ -109,7 +111,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
             Tooltip(
               message: "Your last restore point",
               child: Text(
-                _lastCommitMessage,
+                "${_commits.length}     $_lastCommitMessage",
                 style: const TextStyle(
                   fontSize: 17,
                   fontFamily: "RobotoThin",
@@ -124,14 +126,25 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                 ),
-                child: const Text(
-                  "Restore",
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontFamily: "RobotoRegular",
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black,
-                  ),
+                child: Row(
+                  children: const <Widget>[
+                    Icon(
+                      Icons.restore,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "Restore",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontFamily: "RobotoRegular",
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
+                    )
+                  ],
                 ),
                 onPressed: () {
                   _resetProjectToLastCommit();
@@ -368,9 +381,22 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                     child: ListView.builder(
                       itemCount: _commits.length,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(_commits[index].message),
-                        );
+                        if (index == 0) {
+                          return const SizedBox(
+                            height: 0,
+                          );
+                        } else {
+                          return ListTile(
+                            leading: Text(
+                                (((index - _commits.length - 1) * -1) - 1)
+                                    .toString()),
+                            trailing: ElevatedButton(
+                              onPressed: () {},
+                              child: const Icon(Icons.restore),
+                            ),
+                            title: Text(_commits[index].message),
+                          );
+                        }
                       },
                     ),
                   )
