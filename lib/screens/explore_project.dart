@@ -38,6 +38,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _projectName = "";
   String _lastCommitMessage = "";
   String _lastCommitHash = "";
+  late Map<String, Commit> _commitHistory = {};
   late GitDir _gitDir;
 
   @override
@@ -50,6 +51,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     _gitDir = await GitDir.fromExisting(widget.workingDirectory);
     _getRepoName();
     _getLastCommit();
+    _logCommits();
   }
 
   Future<void> _getRepoName() async {
@@ -59,7 +61,15 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     List<String> proName = pr.stdout.toString().split('/');
 
     setState(() {
-      _projectName = proName.last;
+      _projectName = proName.last.trim();
+    });
+  }
+
+  Future<void> _logCommits() async {
+    Map<String, Commit> commits = await _gitDir.commits();
+
+    setState(() {
+      _commitHistory = commits;
     });
   }
 
@@ -72,7 +82,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
         processWorkingDir: widget.workingDirectory);
 
     setState(() {
-      _lastCommitMessage = lastCommitMessage.stdout.toString();
+      _lastCommitMessage = lastCommitMessage.stdout.toString().trim();
       _lastCommitHash = lastCommit.stdout.toString();
     });
   }
@@ -199,13 +209,14 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
           ),
           Container(
             decoration: const BoxDecoration(
-                border: BorderDirectional(
-                  bottom: BorderSide(width: 2),
-                  top: BorderSide(width: 2),
-                  end: BorderSide(width: 2),
-                  start: BorderSide(width: 2),
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+              border: BorderDirectional(
+                bottom: BorderSide(width: 2),
+                top: BorderSide(width: 2),
+                end: BorderSide(width: 2),
+                start: BorderSide(width: 2),
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
             margin: const EdgeInsets.all(10),
             child: Material(
               elevation: 10,
@@ -216,7 +227,17 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                     decoration: const BoxDecoration(color: Colors.black),
                     child: _renderTableHeader(),
                   ),
-                  Text("this is  a test"),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 30),
+                    child: const Text(
+                      "PROJECT HISTORY",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                   Text("this is  a test"),
                   Text("this is  a test"),
                   Text("this is  a test"),

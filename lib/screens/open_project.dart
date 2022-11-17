@@ -20,6 +20,7 @@ class CreateProject extends StatefulWidget {
 
 class _CreateProject extends State<CreateProject> with WindowListener {
   String _projectDirectory = "";
+  bool _isLoading = false;
 
   void _pushExploreProject(String workingDirectory) {
     Navigator.push(
@@ -35,11 +36,8 @@ class _CreateProject extends State<CreateProject> with WindowListener {
   void _createSagaFile() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
-    File file = File("$projectDirectory\\project.saga");
-
-    if (!await file.exists()) {
-      file.create(recursive: true);
-    }
+    File file =
+        await File("$projectDirectory\\project.saga").create(recursive: true);
 
     Map<String, dynamic> content = {};
     content.addAll({"sagaVersion": "0.0.31"});
@@ -56,6 +54,9 @@ class _CreateProject extends State<CreateProject> with WindowListener {
   }
 
   Future<void> _initNewRepo() async {
+    setState(() {
+      _isLoading = true;
+    });
     String projectDirectory = p.canonicalize(_projectDirectory);
     _createSagaFile();
 
@@ -93,6 +94,23 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       _projectDirectory = projectDirectory;
     });
     _initNewRepo();
+  }
+
+  Widget _renderButtonChild() {
+    return _isLoading
+        ? const CircularProgressIndicator(
+            color: Colors.white,
+            strokeWidth: 2,
+            backgroundColor: Colors.white10,
+          )
+        : const Text(
+            "Track a project",
+            style: TextStyle(
+              fontSize: 25,
+              fontFamily: "RobotoThin",
+              fontWeight: FontWeight.w800,
+            ),
+          );
   }
 
   @override
@@ -147,14 +165,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
                             horizontal: 120, vertical: 20),
                       ),
                       backgroundColor: MaterialStateProperty.all(Colors.black)),
-                  child: const Text(
-                    "Track a project",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: "RobotoThin",
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                  child: _renderButtonChild(),
                 ),
                 const Footer(),
               ],
