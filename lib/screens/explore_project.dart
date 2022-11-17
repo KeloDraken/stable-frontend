@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _lastCommitMessage = "";
   String _lastCommitHash = "";
   String _newCommitMessage = "";
-  late Map<String, Commit> _commitHistory = {};
+  bool _isLoading = false;
+  final List<Commit> _commits = [];
   late GitDir _gitDir;
 
   @override
@@ -69,8 +71,8 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   Future<void> _logCommits() async {
     Map<String, Commit> commits = await _gitDir.commits();
 
-    setState(() {
-      _commitHistory = commits;
+    commits.forEach((key, value) {
+      _commits.add(value);
     });
   }
 
@@ -90,6 +92,11 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
 
   Future<void> _resetProjectToLastCommit() async {
     await runGit(['reset', '--hard', _lastCommitHash],
+        processWorkingDir: widget.workingDirectory);
+  }
+
+  Future<void> _resetToCommit(String commitHash) async {
+    await runGit(['reset', '--hard', commitHash],
         processWorkingDir: widget.workingDirectory);
   }
 
@@ -174,12 +181,30 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     });
   }
 
-  void _createNewCommit() {
-    if (_newCommitMessage == "") return;
-
-    _gitDir.runCommand(["add", "."]);
+  void _createNewCommit() async {
+    await runGit(
+      ['add', '.'],
+      processWorkingDir: widget.workingDirectory,
+    );
     _gitDir.runCommand(["commit", "-m", _newCommitMessage]);
-    _getLastCommit();
+  }
+
+  Widget _renderButtonText() {
+    return _isLoading
+        ? const CircularProgressIndicator(
+            color: Colors.white,
+            strokeWidth: 2,
+            backgroundColor: Colors.white10,
+          )
+        : const Text(
+            "Create restore point",
+            style: TextStyle(
+              fontSize: 17,
+              color: Colors.white,
+              fontFamily: "RobotoThin",
+              fontWeight: FontWeight.w800,
+            ),
+          );
   }
 
   @override
@@ -200,6 +225,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                   tooltip: "Create new restore point",
                   onPressed: () {
                     showDialog(
+                      barrierDismissible: false,
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: const Text("Save current project state"),
@@ -250,8 +276,19 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                           ),
                           TextButton(
                             onPressed: () {
+                              setState(() {
+                                _isLoading = true;
+                              });
                               _createNewCommit();
-                              Navigator.of(ctx).pop();
+
+                              Timer.periodic(const Duration(seconds: 2),
+                                  (timer) {
+                                _getLastCommit();
+                                setState(() {
+                                  _isLoading = false;
+                                  Navigator.of(ctx).pop();
+                                });
+                              });
                             },
                             child: Container(
                               decoration: const BoxDecoration(
@@ -261,15 +298,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                                 ),
                               ),
                               padding: const EdgeInsets.all(14),
-                              child: const Text(
-                                "Create restore point",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                  fontFamily: "RobotoThin",
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
+                              child: _renderButtonText(),
                             ),
                           ),
                         ],
@@ -334,10 +363,17 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                       ),
                     ),
                   ),
-                  Text("this is  a test"),
-                  Text("this is  a test"),
-                  Text("this is  a test"),
-                  Text("this is  a test"),
+                  SizedBox(
+                    height: 290,
+                    child: ListView.builder(
+                      itemCount: _commits.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_commits[index].message),
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             ),
