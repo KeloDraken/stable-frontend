@@ -38,6 +38,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   String _projectName = "";
   String _lastCommitMessage = "";
   String _lastCommitHash = "";
+  String _newCommitMessage = "";
   late Map<String, Commit> _commitHistory = {};
   late GitDir _gitDir;
 
@@ -167,6 +168,18 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
     );
   }
 
+  void _setCommitMessage(String text) {
+    setState(() {
+      _newCommitMessage = text;
+    });
+  }
+
+  void _createNewCommit() {
+    _gitDir.runCommand(["add", "."]);
+    _gitDir.runCommand(["commit", "-m", _newCommitMessage]);
+    _getLastCommit();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -183,7 +196,82 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
               children: <Widget>[
                 IconButton(
                   tooltip: "Create new restore point",
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text("Save current project state"),
+                        content: TextField(
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          onChanged: (String? text) {
+                            if (text != null) _setCommitMessage(text);
+                          },
+                          decoration: const InputDecoration(
+                            label: Text(
+                              "Petrol",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(14),
+                              child: const Text(
+                                "Cancel",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                  fontFamily: "RobotoThin",
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _createNewCommit();
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(14),
+                              child: const Text(
+                                "Create restore point",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white,
+                                  fontFamily: "RobotoThin",
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                   icon: const Icon(Icons.save_as_outlined),
                 ),
                 Text(
