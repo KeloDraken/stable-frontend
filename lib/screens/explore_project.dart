@@ -175,6 +175,8 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
   }
 
   void _createNewCommit() {
+    if (_newCommitMessage == "") return;
+
     _gitDir.runCommand(["add", "."]);
     _gitDir.runCommand(["commit", "-m", _newCommitMessage]);
     _getLastCommit();
@@ -202,9 +204,10 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                       builder: (ctx) => AlertDialog(
                         title: const Text("Save current project state"),
                         content: TextField(
+                          autofocus: true,
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
+                            color: Colors.black,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                           ),
                           onChanged: (String? text) {
@@ -212,10 +215,10 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                           },
                           decoration: const InputDecoration(
                             label: Text(
-                              "Petrol",
+                              "Enter your commit message",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -248,6 +251,7 @@ class _ExploreProject extends State<ExploreProject> with WindowListener {
                           TextButton(
                             onPressed: () {
                               _createNewCommit();
+                              Navigator.of(ctx).pop();
                             },
                             child: Container(
                               decoration: const BoxDecoration(
