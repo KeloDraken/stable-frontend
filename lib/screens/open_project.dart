@@ -35,7 +35,8 @@ class _CreateProject extends State<CreateProject> with WindowListener {
   void _createSagaFile() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
-    File file = await File("$projectDirectory\\project.saga").create(recursive: true);
+    File file =
+        await File("$projectDirectory\\project.saga").create(recursive: true);
 
     Map<String, dynamic> content = {};
     content.addAll({"sagaVersion": "0.0.31"});
