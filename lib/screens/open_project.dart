@@ -35,8 +35,11 @@ class _CreateProject extends State<CreateProject> with WindowListener {
   void _createSagaFile() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
-    File file =
-        await File("$projectDirectory\\project.saga").create(recursive: true);
+    File file = File("$projectDirectory\\project.saga");
+
+    if (!await file.exists()) {
+      file.create(recursive: true);
+    }
 
     Map<String, dynamic> content = {};
     content.addAll({"sagaVersion": "0.0.31"});
@@ -54,6 +57,7 @@ class _CreateProject extends State<CreateProject> with WindowListener {
 
   Future<void> _initNewRepo() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
+    _createSagaFile();
 
     if (await GitDir.isGitDir(projectDirectory)) {
       _pushExploreProject(p.canonicalize(_projectDirectory));
@@ -65,8 +69,6 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       allowContent: true,
       initialBranch: "master",
     );
-
-    _createSagaFile();
 
     // gitDir.
     await runGit(
