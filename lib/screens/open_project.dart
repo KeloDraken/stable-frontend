@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:git/git.dart';
@@ -29,6 +32,25 @@ class _CreateProject extends State<CreateProject> with WindowListener {
     );
   }
 
+  void _createSagaFile() async {
+    String projectDirectory = p.canonicalize(_projectDirectory);
+
+    File file = await File("$projectDirectory\\project.saga").create(recursive: true);
+
+    Map<String, dynamic> content = {};
+    content.addAll({"sagaVersion": "0.0.31"});
+
+    ProcessResult pr = await runGit(['rev-parse', '--show-toplevel'],
+        processWorkingDir: projectDirectory);
+
+    String projectName = pr.stdout.toString().split('/').last.trim();
+
+    content.addAll({"projectName": projectName});
+    content.addAll({"projectDir": projectDirectory});
+
+    file.writeAsStringSync(json.encode(content));
+  }
+
   Future<void> _initNewRepo() async {
     String projectDirectory = p.canonicalize(_projectDirectory);
 
@@ -42,6 +64,8 @@ class _CreateProject extends State<CreateProject> with WindowListener {
       allowContent: true,
       initialBranch: "master",
     );
+
+    _createSagaFile();
 
     // gitDir.
     await runGit(
