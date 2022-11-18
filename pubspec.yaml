@@ -18,6 +18,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  msix: ^3.7.0
 flutter:
   uses-material-design: true
   fonts:
@@ -35,6 +36,19 @@ flutter:
       - asset: assets/fonts/Lobster-Regular.ttf
         weight: 700
 
+msix_config:
+  display_name: KeloDraken Saga
+  publisher_display_name: Samkelo Rocks (Pty) Ltd.
+  msix_version: 0.0.31.0
+  certificate_path: C:\Users\joyma\OneDrive\Desktop\cert\CERTIFICATE.pfx
+  certificate_password: password
+  file_extension: .saga
+  app_uri_handler_hosts: kelodraken.com, saga.kelodraken.com
+  execution_alias: kelodraken
+  enable_at_startup: true
+  publisher: CN=Samkelo Rocks
+  app_installer:
+    publish_folder_path: C:\Users\joyma\OneDrive\Desktop
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
